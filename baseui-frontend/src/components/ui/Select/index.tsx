@@ -7,12 +7,12 @@ type SelectItem = {
   value: string;
 };
 
-type SelectProps = {
+type SelectProps = Omit<BaseSelect.Root.Props<string, false>, "children" | "items"> & {
   items: SelectItem[];
   label?: string;
   placeholder?: string;
   className?: string;
-} & Omit<BaseSelect.Root.Props, "children">;
+};
 
 export function Select({
   items,

@@ -1,0 +1,249 @@
+/* ==========================================================================
+ * 1. インポート
+ *
+ * @import: 外部の CSS やパッケージを読み込む標準的な CSS 構文。
+ * Tailwind v4 では @import "tailwindcss" だけで基本スタイルが有効になる。
+ * ========================================================================== */
+@import "tailwindcss"; /* Tailwind CSS 本体（リセット・ユーティリティ等すべて含む） */
+@import "tw-animate-css"; /* Tailwind 用アニメーションライブラリ */
+@import "shadcn/tailwind.css"; /* shadcn/ui が提供する Tailwind 統合用スタイル */
+@import "@fontsource-variable/geist"; /* Geist フォントの可変フォント定義 */
+
+/* ==========================================================================
+ * 2. Tailwind 設定ファイルの読み込み
+ *
+ * @config: Tailwind v4 のディレクティブ。外部の tailwind.config.ts を読み込む。
+ * v4 では本来不要だが、TS 定数を Tailwind に渡すために使用している。
+ * ========================================================================== */
+@config "../../tailwind.config.ts";
+
+/* ==========================================================================
+ * 3. カスタムバリアント定義
+ *
+ * @custom-variant: Tailwind v4 のディレクティブ。独自のバリアント（条件付きスタイル）を定義する。
+ * ここでは dark: バリアントを定義している。
+ * (&:is(.dark *)) は「.dark クラスの子孫要素」を意味する CSS セレクタ。
+ * 例: dark:bg-black → .dark 配下の要素にのみ bg-black が適用される。
+ * ========================================================================== */
+@custom-variant dark (&:is(.dark *));
+
+/* ==========================================================================
+ * 4. CSS カスタムプロパティ（CSS 変数）— ライトモード
+ *
+ * :root は HTML のルート要素（<html>）を指すセレクタ。
+ * ここで定義した変数はページ全体で使用でき、ライトモード時のデフォルト値となる。
+ *
+ * oklch() は CSS Color Level 4 の色指定関数。
+ * oklch(明度 彩度 色相) の3つの値で色を表現する。
+ *   - 明度: 0（黒）〜 1（白）
+ *   - 彩度: 0（無彩色）〜 0.4 程度（鮮やかな色）
+ *   - 色相: 0〜360（色相環の角度）
+ * 例: oklch(0.205 0 0) → 明度 0.205、彩度 0、色相 0 = 非常に暗いグレー
+ * ========================================================================== */
+:root {
+  /* 基本カラー */
+  --background: oklch(1 0 0); /* ページ背景（白） */
+  --foreground: oklch(0.145 0 0); /* 基本テキスト色（ほぼ黒） */
+
+  /* カード */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+
+  /* ポップオーバー（フローティング UI） */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+
+  /* プライマリー（主要アクション） */
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+
+  /* セカンダリー（副次的アクション） */
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+
+  /* ミュート（控えめな表示） */
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+
+  /* アクセント（強調表示） */
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+
+  /* デストラクティブ（削除・警告系） */
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* ボーダー・入力フィールド・フォーカスリング */
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  /* チャート用カラーパレット（1〜5段階） */
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+
+  /* 角丸の基準値（各サイズはこの値を基に計算される） */
+  --radius: 0.625rem;
+
+  /* サイドバー固有のカラー */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* ==========================================================================
+ * 5. CSS カスタムプロパティ — ダークモード
+ *
+ * .dark クラスが付与された要素の配下で、同名の変数を上書きする。
+ * :root と同じ変数名を使うことで、コンポーネント側の変更なしにテーマを切り替えられる。
+ *
+ * oklch(1 0 0 / 10%) の末尾 / 10% はアルファ値（透明度）を意味する。
+ * ========================================================================== */
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%); /* 白の10%透過 */
+  --input: oklch(1 0 0 / 15%); /* 白の15%透過 */
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* ==========================================================================
+ * 6. Tailwind テーマ登録
+ *
+ * @theme: Tailwind v4 のディレクティブ。CSS 変数を Tailwind のユーティリティクラスとして登録する。
+ * CSS 変数はただ定義しただけでは Tailwind のクラスとしては使えない。
+ * @theme に登録することで初めて bg-xxx, text-xxx 等のユーティリティクラスが生成される。
+ *
+ * ■ inline キーワードについて
+ * inline なし → Tailwind が :root { --color-primary: ... } という CSS 変数定義も出力する
+ * inline あり → CSS 変数定義の出力をスキップし、クラス名の登録だけ行う
+ * このファイルでは :root で既に変数を定義済みなので、inline を付けて重複出力を防いでいる。
+ *
+ * ■ 変数名のプレフィックスとクラスの対応
+ * @theme 内での変数名のプレフィックスが、生成されるクラスの種類を決定する。
+ * この命名規則は Tailwind v4 が定めたもので、自由には変えられない。
+ *
+ *   プレフィックス      → 生成されるクラス例
+ *   --color-xxx        → bg-xxx, text-xxx, border-xxx, ring-xxx
+ *   --font-xxx         → font-xxx
+ *   --radius-xxx       → rounded-xxx
+ *   --z-xxx            → z-xxx
+ *   --spacing-xxx      → p-xxx, m-xxx, gap-xxx, w-xxx, h-xxx
+ * ========================================================================== */
+@theme inline {
+  /* フォント: font-sans クラスで使用可能 */
+  --font-sans: "Geist Variable", sans-serif;
+
+  /*
+   * カラー登録
+   * --color-xxx: var(--xxx) の形式で、:root で定義した CSS 変数を Tailwind クラスに紐付ける。
+   *
+   * 例: --color-primary: var(--primary)
+   *   → bg-primary, text-primary, border-primary 等のクラスが使えるようになる
+   *   → 実際の色の値は :root（ライトモード）または .dark（ダークモード）の --primary から取得される
+   *   → これにより、クラス名を変えずにライト/ダークの切り替えが実現できる
+   */
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  /*
+   * 角丸登録
+   * --radius-xxx: 値 の形式で、rounded-xxx クラスを生成する。
+   * :root の --radius（0.625rem）を基準値として、各サイズを係数で計算している。
+   *
+   * 例: --radius-sm: calc(var(--radius) * 0.6)
+   *   → rounded-sm クラスが使えるようになる（0.625rem × 0.6 = 0.375rem）
+   */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ==========================================================================
+ * 7. ベースレイヤー
+ *
+ * @layer base: Tailwind のレイヤーシステム。base はリセット・デフォルトスタイルの層。
+ * base → components → utilities の順に適用され、後のレイヤーほど優先度が高い。
+ *
+ * @apply: Tailwind v4 のディレクティブ。Tailwind のユーティリティクラスを CSS 内で適用する。
+ * className="border-border" と書く代わりに、CSS 側で @apply border-border と書ける。
+ *
+ * outline-ring/50 の /50 はアルファ修飾子で、50%の透明度を意味する。
+ * ========================================================================== */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
