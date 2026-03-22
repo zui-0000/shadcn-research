@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build:*)",
+      "Bash(node -e \"const ra = require\\(''./node_modules/react-aria/package.json''\\); console.log\\(ra.version\\)\")"
+    ]
+  }
+}
